@@ -1,0 +1,2 @@
+# MetodyNumeryczne
+Implementacja algorytmów matematycznych

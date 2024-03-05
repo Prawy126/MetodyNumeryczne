@@ -5,6 +5,7 @@ To repozytorium jest poświęcone implementacjom algorytmów matematycznych w j�
 ### Tematy:
 - [horner wyliczanie wartosci w danym punkcie](https://github.com/Prawy126/MetodyNumeryczne/tree/main/horner)
     - kod:
+
 ```python
 def horner(tablica, x):
     wynik = tablica[0]
@@ -28,6 +29,7 @@ print("Wynik wielomianu dla x =", x, "wynosi", wynik)
 ```
 - [horner dzielenie wielomianu](https://github.com/Prawy126/MetodyNumeryczne/tree/main/horner2)
   - kod:
+
 ```python
 def hornerDzielenie(tablica, x, rzad):
     wynik = []

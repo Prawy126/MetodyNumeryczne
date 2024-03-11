@@ -48,3 +48,27 @@ x = int(input("Proszę podać liczbę przez, którą będziemy dzielić: "))
 
 wynik = hornerDzielenie(tablica, x, rzad)
 ```
+
+ - [bisekcja](https://github.com/Prawy126/MetodyNumeryczne/tree/main/bisekcja)
+  - kod:
+
+```python
+def bisekcja(func, a, b, error_accept):
+    def f(x):
+        return func(x)
+
+    if f(a) * f(b) >= 0:
+        raise ValueError("Założenia bisekcji nie zostały spełnione - f(a) i f(b) muszą mieć różne znaki.")
+
+    while abs(b - a) > error_accept:
+        c = (a + b) / 2
+        if f(c) == 0:
+            break  # Znaleziono dokładny pierwiastek
+        elif f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+
+    return (a + b) / 2
+
+```

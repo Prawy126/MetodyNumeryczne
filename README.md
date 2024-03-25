@@ -50,7 +50,7 @@ wynik = hornerDzielenie(tablica, x, rzad)
 ```
 
  - [bisekcja](https://github.com/Prawy126/MetodyNumeryczne/tree/main/bisekcja)
-  - kod:
+    - kod:
 
 ```python
 def bisekcja(func, a, b, error_accept):

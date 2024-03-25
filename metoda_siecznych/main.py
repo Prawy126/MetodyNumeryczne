@@ -1,6 +1,6 @@
 # Definicja funkcji f(x) = x^3 + x^2 - 3x - 3
 def f(x):
-    return x**3-4*x-12
+    return x**3 + x**2 - 3*x - 3
 
 # Implementacja metody siecznych
 def metoda_siecznych(x0, x1, E):
@@ -18,8 +18,8 @@ def metoda_siecznych(x0, x1, E):
     return x1
 
 # Początkowe punkty i dokładność
-x0 = 2
-x1 = 3
+x0 = 1
+x1 = 2
 E = 0.0001
 
 # Wywołanie metody siecznych

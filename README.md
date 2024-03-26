@@ -75,6 +75,7 @@ def bisekcja(func, a, b, error_accept):
 
  - [Metoda stycznych](https://github.com/Prawy126/MetodyNumeryczne/tree/main/metoda_stycznych)
     - cod:
+ 
  ```python
 
 import math
@@ -147,6 +148,7 @@ print(rozwiazanie)
 ```
 - [Metoda falsi](https://github.com/Prawy126/MetodyNumeryczne/tree/main/metoda_stycznych)
   - cod:
+
 ```python
 # Definicja funkcji f(x) = 3x - cos(x) - 1
 import math

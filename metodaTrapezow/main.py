@@ -1,30 +1,35 @@
+import math
+
 import numpy as np
 
+# Definicja funkcji, którą chcemy zintegrować
 def f(x):
-    return x**2 + 3
+    return math.sqrt(x+1)
 
+# Metoda trapezów do obliczania całki numerycznej
 def trapezoidal_rule(a, b, n):
-    h = (b - a) / n
-    integral_approximation = (f(a) + f(b)) / 2.0
+    h = (b - a) / n  # Szerokość każdego trapezu
+    integral_approximation = (f(a) + f(b)) / 2.0  # Pierwsza i ostatnia wartość funkcji
     for i in range(1, n):
-        integral_approximation += f(a + i * h)
-    integral_approximation *= h
-    return integral_approximation
+        integral_approximation += f(a + i * h)  # Sumowanie wartości funkcji wewnątrz przedziału
+    integral_approximation *= h  # Mnożenie przez szerokość trapezów
+    return integral_approximation  # Zwrócenie przybliżonej wartości całki
 
-# Define the parameters
-a = 2  # lower limit of integration
-b = 5  # upper limit of integration
-n1 = 3  # number of trapezoids for first approximation
-n2 = 6  # number of trapezoids for second approximation
+# Określenie parametrów
+a = 2  # Dolne ograniczenie całkowania
+b = 5  # Górne ograniczenie całkowania
+n1 = 3  # Liczba trapezów dla pierwszej aproksymacji
+n2 = 6  # Liczba trapezów dla drugiej aproksymacji
 
-# Calculate the two approximations
-approximation1 = trapezoidal_rule(a, b, n1)
-approximation2 = trapezoidal_rule(a, b, n2)
+# Obliczenie dwóch aproksymacji
+approximation1 = trapezoidal_rule(a, b, n1)  # Pierwsza aproksymacja
+approximation2 = trapezoidal_rule(a, b, n2)  # Druga aproksymacja
 
-# Calculate Richardson extrapolation
-richardson_approximation = (4 * approximation2 - approximation1) / 3
+# Obliczenie ekstrapolacji Richardsona
+richardson_approximation = (4 * approximation2 - approximation1) / 3  # Ekstrapolacja Richardsona
 
-# Calculate error estimation
-error_estimate = (approximation2 - approximation1) / 3
+# Obliczenie estymacji błędu
+error_estimate = (approximation2 - approximation1) / 3  # Estymacja błędu
 
+# Wydrukowanie wyników
 print("Richardson extrapolation approximation:", richardson_approximation)

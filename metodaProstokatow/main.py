@@ -1,11 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-
-# Definicja funkcji do zcałkowania
+# Definicja funkcji do całkowania
 def f(x):
     return 0.06 * x ** 2 + 2
-
 
 # Całkowanie numeryczne - metoda prostokątów
 def metoda_prostokatow(a, b, n):
@@ -15,14 +13,12 @@ def metoda_prostokatow(a, b, n):
         area += f(a + i * dx) * dx  # Sumowanie powierzchni prostokątów
     return area
 
-
 # Obliczanie błędu
 def oblicz_blad(n, area):
     # Dokładna wartość całki
     dokladna_wartosc = (1 / 3) * (b ** 3 * 0.06 + 2 * b) - (1 / 3) * (a ** 3 * 0.06 + 2 * a)
     blad = abs(dokladna_wartosc - area)
     return blad
-
 
 # Definicja granic całkowania i liczby prostokątów
 a = 1
@@ -58,4 +54,3 @@ plt.grid(True)
 plt.show()
 
 print("Obliczona powierzchnia:", area)
-

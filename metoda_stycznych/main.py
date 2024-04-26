@@ -1,40 +1,40 @@
-import math
+from sympy import sympify, symbols, diff, pi
 
-# Definicja funkcji f(x) = sin(x) - 0.5x
-def f(x):
-    return math.sin(x) - 0.5 * x
+# Definicja zmiennej symbolicznej
+x = symbols('x')
 
-# Definicja pochodnej funkcji f'(x) = cos(x) - 0.5
-def df(x):
-    return math.cos(x) - 0.5
+# Instrukcje dla użytkownika, w tym jak wprowadzać 'pi'
+prompt = input("Pamiętaj oznaczać:\n\t* jako mnożenie\n\t** jako potęgowanie\n\t'pi' jako π\nPodaj wzór funkcji: ")
+# Konwersja podanego wzoru na obiekt wyrażenia sympy, z uwzględnieniem 'pi'
+f = sympify(prompt, {"pi": pi})
 
-# Implementacja metody stycznych
-def metoda_stycznych(x0, e):
-    """
-    x0 -  punkt startowy
-    e - dokładność
-    """
-    # Inicjalizacja zmiennej xn punktem startowym
-    xn = x0
-    # Pętla będzie wykonywana dopóki nie zostanie spełniony warunek zakończenia
-    while True:
-        # Obliczenie wartości funkcji dla aktualnego punktu xn
-        fxn = f(xn)
-        # Sprawdzenie warunku zakończenia (czy wartość funkcji jest dostatecznie bliska zeru)
-        if abs(fxn) < e:
-            return xn
-        # Obliczenie wartości pochodnej funkcji dla aktualnego punktu xn
-        dfxn = df(xn)
-        # Sprawdzenie czy pochodna jest różna od zera (aby uniknąć dzielenia przez zero)
-        if dfxn == 0:
-            return None
-        # Obliczenie kolejnego przybliżonego punktu metodą stycznych
-        xn = xn - fxn / dfxn
+# Pochodna funkcji
+d1 = diff(f, x)
 
-# Punkt startowy to środek przedziału [PI/2, PI]
-x0 = (math.pi/2 + math.pi) / 2
-e = 0.01
+# Pobranie od użytkownika początku i końca przedziału, z możliwością wprowadzenia 'pi'
+a_input = input("Podaj początek przedziału (możesz użyć 'pi'): ")
+b_input = input("Podaj koniec przedziału (możesz użyć 'pi'): ")
 
-# Wywołanie metody stycznych
-rozwiazanie = metoda_stycznych(x0, e)
-print(rozwiazanie)
+# Konwersja przedziałów na wartości liczbowe lub symboliczne
+a = sympify(a_input, {"pi": pi})
+b = sympify(b_input, {"pi": pi})
+
+# Sprawdzenie warunku Twierdzenia Bolzano-Cauchy'ego dla funkcji
+if f.subs(x, a) * f.subs(x, b) > 0:
+    print("\nTwierdzenie Bolzano-Cauchy'ego nie jest spełnione")
+    print(f"W przedziale [{a}, {b}] najpewniej nie ma miejsca zerowego")
+else:
+    epsilon = float(input("Wybierz dokładność (epsilon): "))  # Pobranie dokładności od użytkownika
+
+    # Wybór początkowego przybliżenia (tu: środek przedziału)
+    x0 = (a + b) / 2
+
+    # Metoda stycznych (Newtona)
+    counter = 0
+    while abs(f.subs(x, x0)) > epsilon:
+        x0 = x0 - f.subs(x, x0)/d1.subs(x, x0)
+        counter += 1
+
+    print(f"\nFunkcja f(x) = {f}")
+    print(f"ma miejsce zerowe w x = {x0.evalf()}")
+    print(f"znaleziona w {counter} próbach")

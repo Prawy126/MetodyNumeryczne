@@ -1,40 +1,41 @@
-from sympy import sympify, symbols, diff, pi
+import math
+from sympy import symbols, diff
 
-# Definicja zmiennej symbolicznej
+# Definiujemy zmienną symboliczną
 x = symbols('x')
 
-# Instrukcje dla użytkownika, w tym jak wprowadzać 'pi'
-prompt = input("Pamiętaj oznaczać:\n\t* jako mnożenie\n\t** jako potęgowanie\n\t'pi' jako π\nPodaj wzór funkcji: ")
-# Konwersja podanego wzoru na obiekt wyrażenia sympy, z uwzględnieniem 'pi'
-f = sympify(prompt, {"pi": pi})
 
-# Pochodna funkcji
-d1 = diff(f, x)
+def wyborX0(rownanie, x_val):
+    f = rownanie(x_val)
+    fdiff = diff(rownanie(x), x).subs(x, x_val)
+    return f * fdiff
 
-# Pobranie od użytkownika początku i końca przedziału, z możliwością wprowadzenia 'pi'
-a_input = input("Podaj początek przedziału (możesz użyć 'pi'): ")
-b_input = input("Podaj koniec przedziału (możesz użyć 'pi'): ")
 
-# Konwersja przedziałów na wartości liczbowe lub symboliczne
-a = sympify(a_input, {"pi": pi})
-b = sympify(b_input, {"pi": pi})
+def styczne(rownanie, dokladnosc, dolnyPrzedzial, gornyPrzedzial):
+    a = rownanie(dolnyPrzedzial)
+    b = rownanie(gornyPrzedzial)
 
-# Sprawdzenie warunku Twierdzenia Bolzano-Cauchy'ego dla funkcji
-if f.subs(x, a) * f.subs(x, b) > 0:
-    print("\nTwierdzenie Bolzano-Cauchy'ego nie jest spełnione")
-    print(f"W przedziale [{a}, {b}] najpewniej nie ma miejsca zerowego")
-else:
-    epsilon = float(input("Wybierz dokładność (epsilon): "))  # Pobranie dokładności od użytkownika
+    assert a * b < 0, "Funkcja nie zmienia znaku na przedziale"
 
-    # Wybór początkowego przybliżenia (tu: środek przedziału)
-    x0 = (a + b) / 2
+    if wyborX0(rownanie, dolnyPrzedzial) > 0:
+        x0 = dolnyPrzedzial
+    elif wyborX0(rownanie, gornyPrzedzial) > 0:
+        x0 = gornyPrzedzial
+    else:
+        raise ValueError("Nie można wybrać x0")
 
-    # Metoda stycznych (Newtona)
-    counter = 0
-    while abs(f.subs(x, x0)) > epsilon:
-        x0 = x0 - f.subs(x, x0)/d1.subs(x, x0)
-        counter += 1
+    while True:
+        fx0 = rownanie(x0)
+        fprime_x0 = float(diff(rownanie(x), x).subs(x, x0))
+        x1 = x0 - fx0 / fprime_x0
 
-    print(f"\nFunkcja f(x) = {f}")
-    print(f"ma miejsce zerowe w x = {x0.evalf()}")
-    print(f"znaleziona w {counter} próbach")
+        m = min(abs(float(diff(rownanie(x), x, 2).subs(x, dolnyPrzedzial))),
+                abs(float(diff(rownanie(x), x, 2).subs(x, gornyPrzedzial))))
+        if abs(rownanie(x1)) / m <= dokladnosc:
+            return x1
+        else:
+            x0 = x1
+
+
+rownanie = lambda x: x ** 3 - 2 * x ** 2 - 3 * x - 5
+print(styczne(rownanie, 0.0001, 3, 4))

@@ -79,38 +79,47 @@ def bisekcja(func, a, b, error_accept):
  ```python
 
 import math
+from sympy import symbols, diff
 
-# Definicja funkcji f(x) = sin(x) - 0.5x
-def f(x):
-    return math.sin(x) - 0.5 * x
+# Definiujemy zmienną symboliczną
+x = symbols('x')
 
-# Definicja pochodnej funkcji f'(x) = cos(x) - 0.5
-def df(x):
-    return math.cos(x) - 0.5
 
-# Implementacja metody stycznych
-def metoda_stycznych(x0, e):
-    """
-    x0 -  punkt startowy
-    e - dokładność
-    """
-    xn = x0
+def wyborX0(rownanie, x_val):
+    f = rownanie(x_val)
+    fdiff = diff(rownanie(x), x).subs(x, x_val)
+    return f * fdiff
+
+
+def styczne(rownanie, dokladnosc, dolnyPrzedzial, gornyPrzedzial):
+    a = rownanie(dolnyPrzedzial)
+    b = rownanie(gornyPrzedzial)
+
+    assert a * b < 0, "Funkcja nie zmienia znaku na przedziale"
+
+    if wyborX0(rownanie, dolnyPrzedzial) > 0:
+        x0 = dolnyPrzedzial
+    elif wyborX0(rownanie, gornyPrzedzial) > 0:
+        x0 = gornyPrzedzial
+    else:
+        raise ValueError("Nie można wybrać x0")
+
     while True:
-        fxn = f(xn)
-        if abs(fxn) < e:
-            return xn
-        dfxn = df(xn)
-        if dfxn == 0:
-            return None
-        xn = xn - fxn / dfxn
+        fx0 = rownanie(x0)
+        fprime_x0 = float(diff(rownanie(x), x).subs(x, x0))
+        x1 = x0 - fx0 / fprime_x0
 
-# Punkt startowy to środek przedziału [PI/2, PI]
-x0 = (math.pi/2 + math.pi) / 2
-e = 0.01
+        m = min(abs(float(diff(rownanie(x), x, 2).subs(x, dolnyPrzedzial))),
+                abs(float(diff(rownanie(x), x, 2).subs(x, gornyPrzedzial))))
+        if abs(rownanie(x1)) / m <= dokladnosc:
+            return x1
+        else:
+            x0 = x1
 
-# Wywołanie metody stycznych
-rozwiazanie = metoda_stycznych(x0, e)
-print(rozwiazanie)
+
+rownanie = lambda x: x ** 3 - 2 * x ** 2 - 3 * x - 5
+print(styczne(rownanie, 0.0001, 3, 4))
+
 
 ```
 - [Metoda siecznych](https://github.com/Prawy126/MetodyNumeryczne/tree/main/metoda_siecznych)
@@ -197,7 +206,7 @@ print(rozwiazanie)
 
 ```
 
-- Metoda prostokątów
+- [Metoda prostokątów](https://github.com/Prawy126/MetodyNumeryczne/tree/main/metoda_prostokatow)
     - kod:
 
 ```python
@@ -265,7 +274,7 @@ print("Obliczona powierzchnia:", area)
 
 ```
 
-- Metoda trapezów
+- [Metoda trapezów](https://github.com/Prawy126/MetodyNumeryczne/tree/main/metoda_trapezow)
   - cod:
 
 ```python
@@ -303,7 +312,7 @@ print("Richardson extrapolation approximation:", richardson_approximation)
 
 ```
 
-- Metoda praboli
+- [Metoda praboli](https://github.com/Prawy126/MetodyNumeryczne/tree/main/metoda_prostokatow)
   - cod:
   
 ```python
@@ -348,7 +357,7 @@ print("Wynik:", cSimpson(f1, lower_bound, upper_bound, divs1))
 
 ```
 
-- Interpolacja
+- [Interpolacja](https://github.com/Prawy126/MetodyNumeryczne/tree/main/interpolacja)
     - cod:
 
 ```python
@@ -406,5 +415,90 @@ plt.ylabel('y')  # Etykieta osi y
 plt.legend()  # Dodanie legendy
 plt.grid(True)  # Włączenie siatki
 plt.show()  # Wyświetlenie wykresu
+
+```
+
+- [Aproksymacja](https://github.com/Prawy126/MetodyNumeryczne/tree/main/aproksymacja)
+    - cod:
+
+```python
+
+import numpy as np
+
+# Dane punktów
+x_points = np.array([0, 3, 6, 12])
+y_points = np.array([4, 5, 4, 2])
+
+# Stopień wielomianu
+degree = 3
+
+# Użycie polyfit do znalezienia współczynników wielomianu
+coefficients = np.polyfit(x_points, y_points, degree)
+
+# Użycie poly1d do utworzenia funkcji wielomianowej
+p = np.poly1d(coefficients)
+
+# Wyświetlenie współczynników wielomianu
+print("Współczynniki wielomianu:", p)
+#Wielomian aproksymujący:
+#       3          2
+#0.041 x - 0.5966 x + 6.599 x + 7.453
+
+```
+
+- [Eliminacja Gaussa](https://github.com/Prawy126/MetodyNumeryczne/tree/main/eliminacjaGaussa)
+    - cod:
+
+```python
+
+import numpy as np
+
+# Definicja macierzy A i wektora b jako float
+A = np.array([
+    [3, 0, 6],       # Definicja macierzy A
+    [1, 2, 8],
+    [4, 5, -2]
+], dtype=float)
+b = np.array([-12, -12, 39], dtype=float)  # Definicja wektora b
+
+# Funkcja wykonująca eliminację Gaussa z wyborem elementu głównego
+def gaussian_elimination_with_pivoting(A, b):
+    n = len(b)  # Liczba równań/rozmiar macierzy
+    # Tworzymy macierz rozszerzoną poprzez dołączenie wektora b jako nowej kolumny
+    Ab = np.hstack([A, b.reshape(-1, 1)])
+
+    for i in range(n):
+
+        # Sprawdzamy założenia
+        determinant = np.linalg.det(A)
+        assert determinant != 0, "Wyznacznik macierzy nie jest różny od zera. Macierz jest osobliwa i nie można jej rozwiązać."
+        # Wybór elementu głównego w kolumnie i
+        max_row = np.argmax(np.abs(Ab[i:, i])) + i  # Znajdujemy indeks maksymalnego elementu
+        # Zamiana wierszy, aby maksymalny element był na pozycji głównej
+        Ab[[i, max_row]] = Ab[[max_row, i]]
+
+        # Upewniamy się, że element główny nie jest zerowy
+        assert Ab[i, i] != 0, "Matrix is singular and cannot be solved."
+
+
+        # Eliminacja Gaussa
+        for j in range(i + 1, n):
+            factor = Ab[j, i] / Ab[i, i]  # Współczynnik do eliminacji
+            Ab[j, i:] -= factor * Ab[i, i:]  # Eliminacja wiersza
+
+    # Rozwiązywanie układu równań metodą wstecznej substytucji
+    x = np.zeros(n)  # Inicjalizacja wektora rozwiązania
+    for i in range(n - 1, -1, -1):  # Iteracja od ostatniego wiersza do pierwszego
+        # Obliczenie i-tej współrzędnej wektora rozwiązania
+        x[i] = (Ab[i, -1] - np.dot(Ab[i, i + 1:n], x[i + 1:n])) / Ab[i, i]
+
+    return x
+
+# Rozwiązanie układu równań Ax = b
+x = gaussian_elimination_with_pivoting(A, b)
+print("Rozwiązanie x:", x)
+
+# determinant = np.linalg.det(matrix)
+
 
 ```

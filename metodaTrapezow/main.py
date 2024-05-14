@@ -16,8 +16,8 @@ def trapezoidal_rule(a, b, n):
     return integral_approximation  # Zwrócenie przybliżonej wartości całki
 
 # Określenie parametrów
-a = 2  # Dolne ograniczenie całkowania
-b = 5  # Górne ograniczenie całkowania
+a = 0  # Dolne ograniczenie całkowania
+b = 1  # Górne ograniczenie całkowania
 n1 = 3  # Liczba trapezów dla pierwszej aproksymacji
 n2 = 6  # Liczba trapezów dla drugiej aproksymacji
 

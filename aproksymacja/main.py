@@ -1,8 +1,8 @@
 import numpy as np
 
 # Dane punktów
-x_points = np.array([0, 3, 6, 12])
-y_points = np.array([4, 5, 4, 2])
+x_points = np.array([0, 3, 6,9, 12])
+y_points = np.array([4, 5, 4, 1,2])
 
 # Stopień wielomianu
 degree = 3
@@ -17,4 +17,4 @@ p = np.poly1d(coefficients)
 print("Współczynniki wielomianu:", p)
 #Wielomian aproksymujący:
 #       3          2
-#0.041 x - 0.5966 x + 6.599 x + 7.453
+#0.01852 x - 0.3492 x + 1.357 x + 3.914

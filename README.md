@@ -3,6 +3,10 @@
 To repozytorium jest poświęcone implementacjom algorytmów matematycznych w języku Python
 
 ### Tematy:
+
+#### [Lista zadań](https://prawy126.github.io/MetodyNumeryczne/ZADANIA)
+
+#### ZADANIA
 - [horner wyliczanie wartosci w danym punkcie](https://github.com/Prawy126/MetodyNumeryczne/tree/main/horner)
     - kod:
 

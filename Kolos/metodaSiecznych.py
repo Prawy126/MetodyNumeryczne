@@ -1,41 +1,48 @@
-# Definicja funkcji f(x)
+from sympy import *
+
+x = Symbol('x')
+
+E = 0.0001  # Przybliżenie
+a = 1  # Początek przedziału
+b = 2  # Koniec przedziału
+
+
 def f(x):
-    return x**3 + x**2 - 3 * x - 3
+    return x ** 3 + x ** 2 - 3 * x - 3
 
-# Funkcja wartości bezwzględnej
-def abs(x):
-    if (x >= 0):
-        return x
-    else:
-        return -x
 
-# Funkcja obliczająca pierwiastek metodą siecznych
-def metoda_siecznych(a, b, e):
-    # Sprawdzenie założenia
-    if (f(a) * f(b) >= 0):
-        raise ValueError("Niespełnione założenia - f(a) i f(b) muszą mieć różne znaki.")
+def df1(x1):  # Pierwsza pochodna f
+    return diff(f(x), x).subs(x, x1)
 
-    # Poniżej jest zmienna która będzie przechowywać iteracje algorytmu Newtona
-    i = 0
 
-    while (True):
-        # Obliczanie nowej wartości x0 zgodnie z metodą siecznych
-        x0 = b - (f(b) * (b - a)) / (f(b) - f(a))
+def df2(x1):  # Druga pochodna f
+    return diff(f(x), x, x).subs(x, x1)
 
-        i = i + 1
 
-        # Sprawdzanie warunku zbieżności
-        if abs(f(x0)) < e:
-            print("Ilość iteracji:", i)
-            return x0 # Przerwanie pętli i zwrócenie przybliżoną wartość pierwiastka f(x)
+def siecznych(a, b, E):
+    global x1
 
-        # Przygotowanie wartości dla kolejnej iteracji
-        a, b = b, x0
+    if f(a) * f(b) < 0:  # Założenie 1: Funkcja zmienia znak na krańcach przedziału
+        i = 0  # Licznik iteracji
 
-# Wypisanie wyniku
-try:
-    print("Metoda siecznych")
-    wynik = metoda_siecznych(1, 2, 0.0001)
-    print("Pierwiastek funkcji:", wynik)
-except ValueError as e:
-    print("Błąd:", e)
+        if df1(a) * df2(a) > 0:  # Założenie 2: Wybór punktu startowego
+            x0 = a
+            x1 = b
+        else:
+            x0 = b
+            x1 = a
+
+        xn = x1 - (f(x1) * (x1 - x0)) / (f(x1) - f(x0))  # Pierwsze przybliżenie
+
+        while abs(f(xn)) > E:  # Dopóki wartość funkcji w punkcie nie spełnia dokładności E
+            temp = xn - (f(xn) * (xn - x1)) / (f(xn) - f(x1))  # x_n+1
+            x1 = xn
+            xn = temp
+
+            i += 1
+
+    print("Szukany pierwiastek to: " + str(xn))  # Wyświetlenie wyniku
+    print("Liczba iteracji: " + str(i))  # Wyświetlenie liczby iteracji
+
+
+siecznych(a, b, E)

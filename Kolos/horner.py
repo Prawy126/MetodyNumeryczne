@@ -6,6 +6,16 @@ def hornerDzielenie(tablica, x, rzad):
         wynik.append(wartosc)
     return wynik
 
+def horner(tablica, x):
+    # Inicjalizacja wyniku wartością współczynnika przy najwyższej potędze.
+    wynik = tablica[0]
+    # Iteracja po współczynnikach wielomianu, zaczynając od współczynnika przy potędze niższej niż najwyższa.
+    for i in range(1, len(tablica)):
+        # Zastosowanie schematu Hornera do obliczenia wartości wielomianu dla danej wartości x.
+        wynik = wynik * x + tablica[i]
+    # Zwrócenie obliczonej wartości wielomianu.
+    return wynik
+
 def wypiszWielomian(tablica):
     wielomian = ""
     stopien = len(tablica) - 2
